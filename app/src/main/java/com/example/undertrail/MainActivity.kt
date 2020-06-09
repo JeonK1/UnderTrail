@@ -17,6 +17,7 @@ class MainActivity : AppCompatActivity() {
 
     val quickUnderTrailFragment = QuickUnderTrailFragment()
     val underTrailFragment = UnderTrailFragment()
+    val detailUnderTrailFragment = DetailUnderTrailFragment()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -77,6 +78,14 @@ class MainActivity : AppCompatActivity() {
                     val fragment = supportFragmentManager.beginTransaction()
                     fragment.addToBackStack(null)
                     fragment.replace(R.id.myFragment, underTrailFragment)
+                    fragment.commit()
+                    true
+                }
+                R.id.navigation_third -> {
+                    //fragment select
+                    val fragment = supportFragmentManager.beginTransaction()
+                    fragment.addToBackStack(null)
+                    fragment.replace(R.id.myFragment, detailUnderTrailFragment)
                     fragment.commit()
                     true
                 }

@@ -43,7 +43,7 @@ class QuickUnderTrailFragment : Fragment() {
         override fun onLocationChanged(location: Location?) {
             myLoc = location
             Log.e("QuickUnderTailFragment", "onLocationChanged : myloc is (" + location?.longitude + "," + location?.latitude + ")")
-            queryTest()
+            getNearStation()
         }
 
         override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {
@@ -56,10 +56,8 @@ class QuickUnderTrailFragment : Fragment() {
         }
     }
 
-    private fun queryTest() {
-        Log.e("queryTest", "start")
+    private fun getNearStation() {
         myDBHelper = MyDBHelper(context)
-        //val result = myDBHelper.findProduct("1916")
         val resultList = myDBHelper.findNearSubwayStation(myLoc)
         stationRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         stationAdapter = StationAdpater(resultList)

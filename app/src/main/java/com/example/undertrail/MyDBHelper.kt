@@ -167,6 +167,7 @@ class MyDBHelper(val context: Context?) : SQLiteOpenHelper(context, DB_NAME, nul
     }
 
     fun getAllStationName():ArrayList<String>{
+        // ~~역 (~호선)
         val nameList = ArrayList<String>()
         val strsql = "SELECT stat_name, line_num" +
                 " FROM SEOUL_LIST"
@@ -176,6 +177,26 @@ class MyDBHelper(val context: Context?) : SQLiteOpenHelper(context, DB_NAME, nul
             cursor.moveToFirst()
             for(i in 0 until cursor.count) {
                 val tmpStr = cursor.getString(0) + "(" + cursor.getString(1) +")"
+                nameList.add(tmpStr)
+                cursor.moveToNext()
+            }
+        }
+        cursor.close()
+        db.close()
+        return nameList
+    }
+    fun getAllStationName2():ArrayList<String>{
+        // ~~역
+        val nameList = ArrayList<String>()
+        val strsql = "SELECT stat_name" +
+                " FROM SEOUL_LIST" +
+                " GROUP BY stat_name"
+        val db = this.readableDatabase
+        val cursor = db.rawQuery(strsql, null)
+        if(cursor.count != 0) {
+            cursor.moveToFirst()
+            for(i in 0 until cursor.count) {
+                val tmpStr = cursor.getString(0)
                 nameList.add(tmpStr)
                 cursor.moveToNext()
             }

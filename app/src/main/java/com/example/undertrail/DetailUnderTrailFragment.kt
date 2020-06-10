@@ -16,8 +16,8 @@ import java.io.File
  * A simple [Fragment] subclass.
  */
 class DetailUnderTrailFragment : Fragment() {
-    lateinit var nameList:ArrayList<String>;
     lateinit var myDBHelper:MyDBHelper
+    lateinit var nameList:ArrayList<String>;
     lateinit var adapter: ArrayAdapter<String>
 
     override fun onCreateView(

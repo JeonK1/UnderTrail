@@ -39,7 +39,7 @@ class StationAdpater(val items:ArrayList<QuickStationInfo>): RecyclerView.Adapte
     }
 
     override fun onBindViewHolder(holder: StationAdpater.MyViewHolder, position: Int) {
-        holder.sName.text = items[position].station.sName
+        holder.sName.text = items[position].station.sName + "역"
         holder.sLineNum.text = items[position].station.sLine_num
         holder.sDistance.text = items[position].station.sDistance.toString() + "m"
         holder.leftMinTrail1.text = items[position].nearTrainInfo1.leftMinute + "분 뒤에 도착합니다."

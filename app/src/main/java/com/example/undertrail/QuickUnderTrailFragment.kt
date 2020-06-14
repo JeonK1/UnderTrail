@@ -18,6 +18,7 @@ import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.google.gson.Gson
+import kotlinx.android.synthetic.main.fragment_quick_under_trail.*
 import org.json.JSONException
 import org.json.JSONObject
 
@@ -32,6 +33,7 @@ class QuickUnderTrailFragment : Fragment() {
     lateinit var myDBHelper:MyDBHelper
     lateinit var stationRecyclerView: RecyclerView
     lateinit var stationAdapter: StationAdpater
+    var imageFlag = false
 
     private var requestQueue: RequestQueue? = null
 
@@ -47,6 +49,8 @@ class QuickUnderTrailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        imageFlag=false
+        quickPageImage.visibility = View.VISIBLE
         locationInit()
     }
 
@@ -67,6 +71,9 @@ class QuickUnderTrailFragment : Fragment() {
 
     private val locationListener: LocationListener = object : LocationListener{
         override fun onLocationChanged(location: Location?) {
+            imageFlag=true
+            if(quickPageImage!=null)
+                quickPageImage.visibility = View.INVISIBLE
             myLoc = location
             Log.e("QuickUnderTailFragment", "onLocationChanged : myloc is (" + location?.longitude + "," + location?.latitude + ")")
             getNearStation()

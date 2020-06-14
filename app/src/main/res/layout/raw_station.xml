@@ -2,50 +2,108 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
-    android:layout_margin="20dp"
-    android:background="#fcfccc"
+    android:padding="20dp"
+    android:layout_marginTop="10dp"
+    android:background="@drawable/undertail_rectangle"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
-    <TextView
-        android:id="@+id/sName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-    <TextView
-        android:id="@+id/sLineNum"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-    <TextView
-        android:id="@+id/sDistance"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
     <LinearLayout
         android:orientation="horizontal"
+        android:layout_marginLeft="10dp"
+        android:gravity="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <TextView
-            android:id="@+id/leftMinTrail1"
-            android:layout_weight="1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:id="@+id/sName"
+            android:fontFamily="@font/undertail_font"
+            android:textStyle="bold"
+            android:textSize="17sp"
+            android:textColor="@android:color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"/>
+        <TextView
+            android:id="@+id/sLineNum"
+            android:fontFamily="@font/undertail_font"
+            android:textStyle="bold"
+            android:textSize="17sp"
+            android:layout_marginLeft="10dp"
+            android:textColor="@android:color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"/>
+        <LinearLayout
+            android:orientation="horizontal"
+            android:textStyle="bold"
+            android:layout_marginLeft="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+            <TextView
+                android:fontFamily="@font/undertail_font"
+                android:textSize="15sp"
+                android:layout_marginLeft="10dp"
+                android:text="("
+                android:textColor="@android:color/white"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <TextView
+                android:id="@+id/sDistance"
+                android:fontFamily="@font/undertail_font"
+                android:textSize="15sp"
+                android:layout_marginLeft="10dp"
+                android:textColor="@android:color/white"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <TextView
+                android:fontFamily="@font/undertail_font"
+                android:textSize="15sp"
+                android:layout_marginLeft="10dp"
+                android:text=")"
+                android:textColor="@android:color/white"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
         <TextView
             android:id="@+id/lastStationTrain1"
-            android:layout_weight="1"
-            android:layout_width="match_parent"
+            android:fontFamily="@font/undertail_font"
+            android:gravity="center"
+            android:textColor="@android:color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:id="@+id/leftMinTrail1"
+            android:fontFamily="@font/undertail_font"
+            android:layout_marginLeft="25dp"
+            android:gravity="center"
+            android:textColor="@android:color/white"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
     </LinearLayout>
     <LinearLayout
         android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginTop="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <TextView
-            android:id="@+id/leftMinTrail2"
-            android:layout_weight="1"
-            android:layout_width="match_parent"
+            android:id="@+id/lastStationTrain2"
+            android:fontFamily="@font/undertail_font"
+            android:textColor="@android:color/white"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
         <TextView
-            android:id="@+id/lastStationTrain2"
-            android:layout_weight="1"
-            android:layout_width="match_parent"
+            android:id="@+id/leftMinTrail2"
+            android:fontFamily="@font/undertail_font"
+            android:layout_marginLeft="25dp"
+            android:textColor="@android:color/white"
+            android:gravity="center"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
     </LinearLayout>
 </LinearLayout>

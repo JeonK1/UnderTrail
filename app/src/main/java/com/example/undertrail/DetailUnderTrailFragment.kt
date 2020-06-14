@@ -23,6 +23,7 @@ class DetailUnderTrailFragment : Fragment() {
     lateinit var myDBHelper:MyDBHelper
     lateinit var nameList:ArrayList<String>;
     lateinit var adapter: ArrayAdapter<String>
+    var firstExecuteFlag=0
     var radioFlag = 1
     var nowDBID = -1
 
@@ -36,6 +37,8 @@ class DetailUnderTrailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        firstExecuteFlag=0
+        resultLayout.visibility = View.INVISIBLE
         initAutoComplete()
         initBtn()
 
@@ -153,6 +156,8 @@ class DetailUnderTrailFragment : Fragment() {
                     myDBHelper = MyDBHelper(context)
                     val station = myDBHelper.getStationDetailInfo(sName, sLineNum)
                     if(!station.sId.equals("")) {
+                        firstExecuteFlag=1
+                        resultLayout.visibility = View.VISIBLE
                         stationName.setText(station.sName)
                         stationLineNum.setText(station.sLineNum)
                         stationAddress.setText(station.sAddress)

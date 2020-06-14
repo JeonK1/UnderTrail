@@ -42,73 +42,12 @@ class QuickUnderTrailFragment : Fragment() {
         // Inflate the layout for this fragment
         var root = inflater.inflate(R.layout.fragment_quick_under_trail, container, false)
         stationRecyclerView = root.findViewById(R.id.stationRecyclerView)
-        locationInit()
         return root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        jsonTest()
-    }
-
-    private fun jsonTest() {
-        //val url = "https://api.myjson.com/bins/xbspb"
-        val url = "http://swopenapi.seoul.go.kr/api/subway/704b5a54586b616e35365955696849/json/realtimePosition/1/10/8%ED%98%B8%EC%84%A0/"
-        Log.e("test", "Setting..")
-        val request = JsonObjectRequest(Request.Method.GET, url, null, Response.Listener {
-                response ->try {
-            val jsonObject = response.getString("message")
-            Log.e("test", jsonObject.toString())
-            /*
-            val jsonArray = response.getJSONArray("employees")
-            for (i in 0 until jsonArray.length()) {
-                val employee = jsonArray.getJSONObject(i)
-                val firstName = employee.getString("firstname")
-                val age = employee.getInt("age")
-                val mail = employee.getString("mail")
-                val str = "$firstName, $age, $mail\n\n"
-                Log.e("test", str)
-            }
-             */
-        } catch (e: JSONException) {
-            Log.e("test", "failed ㅜㅜ")
-            e.printStackTrace()
-        }
-        }, Response.ErrorListener { error -> error.printStackTrace() })
-        requestQueue?.add(request)
-
-        // Access the RequestQueue through your singleton class.
-        //MySingleton.getInstance(this).addToRequestQueue(jsonObjectRequest)
-        /*
-        val url = "http://jsonplaceholder.typicode.com/posts/1"
-        //val url = "http://swopenapi.seoul.go.kr/api/subway/704b5a54586b616e35365955696849/json/realtimePosition/1/10/8호선/"
-        val client = OkHttpClient()
-        val request = Request.Builder()
-            .url(url)
-            .build()
-
-        println(Thread.currentThread())
-        client.newCall(request).enqueue(object : Callback {
-            override fun onFailure(call: Call?, e: IOException?) {
-                Log.e("testFail", e?.printStackTrace().toString())
-            }
-
-            override fun onResponse(call: Call?, response: Response) {
-                if (!response.isSuccessful) {
-                    System.err.println("Response not successful")
-                    return
-                }
-                val json = response.body()!!.string()
-                val myData = Klaxon().parse<MyData>(json)
-                Log.e("test", "Data = "+myData!!.userId.toString())
-                Log.e("test", "Data = "+myData!!.title.toString())
-                Log.e("test", Thread.currentThread().toString())
-            }
-
-        })
-        // Shutdown the executor as soon as the request is handled
-        client.dispatcher().executorService().shutdown()
-         */
+        locationInit()
     }
 
     private fun locationInit() {
@@ -146,13 +85,19 @@ class QuickUnderTrailFragment : Fragment() {
     private fun getNearStation() {
         myDBHelper = MyDBHelper(context)
         val resultList = myDBHelper.findNearSubwayStation(myLoc)
+        val resultList2 = ArrayList<QuickStationInfo>()
+        for(res in resultList){
+            val nearTrainInfo1 = myDBHelper.getNearTrainInfo1(res.sId)
+            val nearTrainInfo2 = myDBHelper.getNearTrainInfo2(res.sId)
+            resultList2.add(QuickStationInfo(res, nearTrainInfo1, nearTrainInfo2))
+        }
         stationRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-        stationAdapter = StationAdpater(resultList)
+        stationAdapter = StationAdpater(resultList2)
         stationAdapter.itemClickListener = object:StationAdpater.OnItemClickListener{
             override fun OnItemClick(
                 holder: StationAdpater.MyViewHolder,
                 view: View,
-                data: Station,
+                data: QuickStationInfo,
                 position: Int
             ) {
                 //item 클릭했을때의 상황..

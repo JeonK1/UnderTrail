@@ -1,6 +1,5 @@
 package com.example.undertrail
 
-import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
 import android.database.Cursor
@@ -10,6 +9,9 @@ import android.location.Location
 import android.location.LocationManager
 import android.util.Log
 import androidx.core.app.ActivityCompat
+import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -27,6 +29,13 @@ class MyDBHelper(val context: Context?) : SQLiteOpenHelper(context, DB_NAME, nul
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
 
+    }
+    fun DBIDtoSName(db_id: String):String{
+        val db = this.readableDatabase
+        val strsql = "SELECT stat_name FROM SEOUL_LIST WHERE db_id = "+db_id
+        val cursor = db.rawQuery(strsql, null)
+        cursor.moveToFirst()
+        return cursor.getString(0);
     }
     fun SIDtoSName(sid: Int):String{
         val db = this.readableDatabase
@@ -183,19 +192,10 @@ class MyDBHelper(val context: Context?) : SQLiteOpenHelper(context, DB_NAME, nul
                     val stationName = cursor.getString(3)
                     val stationLineNum = cursor.getString(8)
                     val sDistance = stationLoc?.distanceTo(loc)?.toDouble()
-                    Log.e("stationGPS", stationLoc?.latitude.toString()+ " " +stationLoc?.longitude.toString())
-                    Log.e("myGPS", loc.latitude.toString()+ " " +loc.longitude.toString())
-                    Log.e("distance", sDistance.toString())
+//                    Log.e("stationGPS", stationLoc?.latitude.toString()+ " " +stationLoc?.longitude.toString())
+//                    Log.e("myGPS", loc.latitude.toString()+ " " +loc.longitude.toString())
+//                    Log.e("distance", sDistance.toString())
                     stationList.add(Station(stationID.toInt(), stationName, stationLoc, stationLineNum, sDistance.toInt()))
-                    //http://swopenAPI.seoul.go.kr/api/subway/(인증키)/json/realtimeStationArrival/0/5/서울
-                    /*
-                    KEY	String(필수)	인증키	OpenAPI 에서 발급된 인증키
-                    TYPE	String(필수)	요청파일타입	xml : xml, xml파일 : xmlf, 엑셀파일 : xls, json파일 : json
-                    SERVICE	String(필수)	서비스명	realtimeStationArrival
-                    START_INDEX	INTEGER(필수)	요청시작위치	정수 입력 (페이징 시작번호 입니다 : 데이터 행 시작번호)
-                    END_INDEX	INTEGER(필수)	요청종료위치	정수 입력 (페이징 끝번호 입니다 : 데이터 행 끝번호)
-                    statnNm	STRING(필수)	지하철역명	지하철역명
-                     */
                     cursor.moveToNext()
                 }
             }
@@ -274,25 +274,65 @@ class MyDBHelper(val context: Context?) : SQLiteOpenHelper(context, DB_NAME, nul
         db.close()
         return stationData
     }
+    fun getNearTrainInfo1(sId:Int):NearTrainInfo{
+        val timestamp = LocalDateTime.now()
+        val dateTime = timestamp.format(DateTimeFormatter.ofPattern("HH:mm"))
+        val tableName = "SEOUL_"+SIDtoDBID(sId)
+        var whereContext = ""
+        val currentDayOfWeek = Calendar.getInstance().get(Calendar.DAY_OF_WEEK)
+        if((currentDayOfWeek>1) && (currentDayOfWeek<7))
+            whereContext+="(date=7 or date=4)"
+        else
+            whereContext+="(date=7 or date=3)"
 
-    fun findProduct(pname: String):Boolean{
-        //val strsql = "select * from SEOUL_LIST where db_id=1916"
-        val strsql = "select * from "+TABLE_NAME + " where "+ PNAME + " = " + pname + ""
+        val strsql = "SELECT time, dest_ FROM "+tableName+" WHERE "+whereContext+" and dire_=1 and (time >= \""+dateTime+"\")"
         val db = this.readableDatabase
         val cursor = db.rawQuery(strsql, null)
-        Log.e("findProduct, count", cursor.count.toString())
-        if(cursor.count != 0) {
-            cursor.moveToFirst()
-            Log.e("findProduct", cursor.getColumnName(3))
-            Log.e("findProduct", cursor.getString(3))
-            cursor.close()
-            db.close()
-            return true
-        }
-        cursor.close()
-        db.close()
-        return false
-    }
 
+        var returnTrainInfo = NearTrainInfo("", "")
+
+        if(cursor.count>0) {
+            cursor.moveToFirst()
+            val leftTime = cursor.getString(0)
+            Log.e("leftTime", leftTime)
+            val nowTime = dateTime.split(":")[0].toInt()*60 + dateTime.split(":")[1].toInt()
+            val nextTime = leftTime.split(":")[0].toInt()*60 + leftTime.split(":")[1].toInt()
+            val leftMinute = (nextTime-nowTime).toString()
+            cursor.moveToFirst()
+            val lastStationName = DBIDtoSName(cursor.getString(1))
+            returnTrainInfo = NearTrainInfo(lastStationName, leftMinute)
+        }
+        return returnTrainInfo
+    }
+    fun getNearTrainInfo2(sId:Int):NearTrainInfo{
+        val timestamp = LocalDateTime.now()
+        val dateTime = timestamp.format(DateTimeFormatter.ofPattern("HH:mm"))
+        val tableName = "SEOUL_"+SIDtoDBID(sId)
+        var whereContext = ""
+        val currentDayOfWeek = Calendar.getInstance().get(Calendar.DAY_OF_WEEK)
+        if((currentDayOfWeek>1) && (currentDayOfWeek<7))
+            whereContext+="(date=7 or date=4)"
+        else
+            whereContext+="(date=7 or date=3)"
+
+        val strsql = "SELECT time, dest_ FROM "+tableName+" WHERE "+whereContext+" and dire_=2 and (time >= \""+dateTime+"\")"
+        val db = this.readableDatabase
+        val cursor = db.rawQuery(strsql, null)
+
+        var returnTrainInfo = NearTrainInfo("", "")
+
+        if(cursor.count>0) {
+            cursor.moveToFirst()
+            val leftTime = cursor.getString(0)
+            Log.e("leftTime", leftTime)
+            val nowTime = dateTime.split(":")[0].toInt()*60 + dateTime.split(":")[1].toInt()
+            val nextTime = leftTime.split(":")[0].toInt()*60 + leftTime.split(":")[1].toInt()
+            val leftMinute = (nextTime-nowTime).toString()
+            cursor.moveToFirst()
+            val lastStationName = DBIDtoSName(cursor.getString(1))
+            returnTrainInfo = NearTrainInfo(lastStationName, leftMinute)
+        }
+        return returnTrainInfo
+    }
 }
 

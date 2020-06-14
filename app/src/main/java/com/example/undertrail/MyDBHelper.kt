@@ -3,6 +3,7 @@ package com.example.undertrail
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
+import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.location.Location
@@ -27,26 +28,46 @@ class MyDBHelper(val context: Context?) : SQLiteOpenHelper(context, DB_NAME, nul
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
 
     }
-
+    fun SIDtoSName(sid: Int):String{
+        val db = this.readableDatabase
+        val strsql = "SELECT stat_name FROM SEOUL_LIST WHERE _id = "+sid
+        val cursor = db.rawQuery(strsql, null)
+        cursor.moveToFirst()
+        return cursor.getString(0);
+    }
+    fun SNametoSID(sname: String):Int{
+        val db = this.readableDatabase
+        val strsql = "SELECT _id FROM SEOUL_LIST WHERE stat_name = \""+sname+"\""
+        val cursor = db.rawQuery(strsql, null)
+        cursor.moveToFirst()
+        return cursor.getString(0).toInt()
+    }
     fun SIDtoDBID(sid: Int):String{
         val db = this.readableDatabase
         val strsql = "SELECT db_id FROM SEOUL_LIST WHERE _id = "+sid
         val cursor = db.rawQuery(strsql, null)
         cursor.moveToFirst()
-        return cursor.getString(0);
-    }
-    fun DBIDtoSID(dbid: String):Int{
-        val db = this.readableDatabase
-        val strsql = "SELECT _id FROM SEOUL_LIST WHERE db_id = "+dbid
-        val cursor = db.rawQuery(strsql, null)
-        cursor.moveToFirst()
-        return cursor.getString(0).toInt();
+        return cursor.getString(0)
     }
 
+    fun getTimeTable(db_id:Int, radioFlag:Int): Cursor {
+        var whereContext = ""
+        if(radioFlag==1)
+            whereContext = "(a.date=7 or a.date=4)"
+        else
+            whereContext = "(a.date=7 or a.date=3)"
+
+        val tableName = "SEOUL_"+db_id+" a, SEOUL_LIST b"
+        val strsql = "SELECT a.dire_, a.time, b.stat_name FROM "+tableName+" WHERE "+whereContext +" and (b.db_id=a.dest_)"
+        //SELECT a.dire_, a.time, b.stat_name FROM SEOUL_2727 a, SEOUL_LIST b WHERE (a.date=7 or a.date=4) and (b.db_id=a.dest_)
+        val db = this.readableDatabase
+        val cursor = db.rawQuery(strsql, null)
+        return cursor
+    }
     fun findRoute(strSId:Int, endSId:Int):ArrayList<Int>{
         data class MyConnect(val dstSId:Int, val weight:Int){
         }
-        data class MyStation(val mySId:Int, val connectList: ArrayList<MyConnect>, var backSId:Int, var totalWeight:Int){
+        data class MyStation(val mySId:Int, val connectList: ArrayList<MyConnect>, var backSId:Int, var backWeight:Int, var totalWeight:Int){
         }
         class MyPair(val value:Int, val key:Int) : Comparable<MyPair>{
             override fun compareTo(other: MyPair): Int {
@@ -65,7 +86,7 @@ class MyDBHelper(val context: Context?) : SQLiteOpenHelper(context, DB_NAME, nul
         var stations = ArrayList<MyStation>()
         for (i in 1..stationCnt){
             var tmpConnect = ArrayList<MyConnect>()
-            stations.add(MyStation(i, tmpConnect, -1, 0))
+            stations.add(MyStation(i, tmpConnect, -1, -1, 0))
             stationCheck.add(false)
         }
         //get subway connect
@@ -82,6 +103,7 @@ class MyDBHelper(val context: Context?) : SQLiteOpenHelper(context, DB_NAME, nul
         //start algorithm
         var totalWeight:Int;
         var route = ArrayList<Int>()
+        var routeWeight = ArrayList<Int>()
         var q = PriorityQueue<MyPair>() // minHeap
         q.add(MyPair(0, strSId)) // first Value
         while(true){
@@ -92,12 +114,16 @@ class MyDBHelper(val context: Context?) : SQLiteOpenHelper(context, DB_NAME, nul
             if(out.key == endSId){
                 totalWeight = out.value
                 var tmpSId = endSId
+                var tmpSWeight = stations[endSId-1].backWeight
                 //Log.e("goBack", "now : "+tmpSId)
                 route.add(tmpSId)
+                routeWeight.add(tmpSWeight)
                 while(tmpSId!=strSId){
                     //Log.e("goBack", "now : "+tmpSId)
                     tmpSId = stations[tmpSId-1].backSId
+                    tmpSWeight = stations[tmpSId-1].backWeight
                     route.add(tmpSId)
+                    routeWeight.add(tmpSId)
                 }
                 break
             }
@@ -109,9 +135,22 @@ class MyDBHelper(val context: Context?) : SQLiteOpenHelper(context, DB_NAME, nul
                 }
                 q.add(MyPair(out.value+tmpConnect.weight, tmpConnect.dstSId))
                 stations[tmpConnect.dstSId-1].backSId = out.key
+                stations[tmpConnect.dstSId-1].backWeight = tmpConnect.weight
             }
         }
-        Log.e("findRoute", "weight : "+totalWeight) // 이건 걸리는 시간
+        //처음 역 환승으로 인한 중복일시 중복 제거
+        var tmpSize = route.size
+        if(SIDtoSName(route[tmpSize-1]).equals(SIDtoSName(route[tmpSize-2]))){
+            route.removeAt(tmpSize-1)
+            routeWeight.removeAt(tmpSize-1)
+        }
+        tmpSize = route.size
+        //마지막 역 환승으로 인한 중복일시 중복 제거
+        if(SIDtoSName(route[0]).equals(SIDtoSName(route[1]))){
+            route.removeAt(0)
+            routeWeight.removeAt(0)
+        }
+        Log.e("findRoute", "weight : "+route.size.toString())
         return route
         // 출발지나 도착지가 환승역인 경우.. 예를들어... "군자 군자 아차산 .... 모란 모란" 이런식으로 두번 불려서 걸리는시간이 원래보다 더 추가될 수 있음. 그니까 맨 앞이랑 맨 뒤가 중복되는게 있으면 알아서 짤라주셔야합니다.
     }
@@ -227,6 +266,9 @@ class MyDBHelper(val context: Context?) : SQLiteOpenHelper(context, DB_NAME, nul
                 stationData = StationDetail(sId, sName, sLineNum, sAddress, sPhoneNum, sMapURL)
                 cursor.moveToNext()
             }
+        }
+        else{
+            stationData = StationDetail("", sName, "", "", "", "")
         }
         cursor.close()
         db.close()

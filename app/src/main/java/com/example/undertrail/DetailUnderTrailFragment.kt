@@ -66,9 +66,9 @@ class DetailUnderTrailFragment : Fragment() {
                 val textView = TextView(activity)
                 textView.layoutParams = viewParams
                 textView.text = cursor.getColumnName(i)
-                //Log.e("test", cursor.getColumnName(i))
                 textView.setBackgroundColor(Color.LTGRAY)
                 textView.textSize = 15.0f
+                textView.gravity = Gravity.CENTER
                 textView.gravity = Gravity.CENTER
                 tablerow.addView(textView)
             }
@@ -85,7 +85,6 @@ class DetailUnderTrailFragment : Fragment() {
                 val textView = TextView(activity)
                 textView.layoutParams = viewParams2
                 textView.text = cursor.getColumnName(i)
-                //Log.e("test", cursor.getColumnName(i))
                 textView.setBackgroundColor(Color.LTGRAY)
                 textView.textSize = 15.0f
                 textView.gravity = Gravity.CENTER
@@ -123,6 +122,7 @@ class DetailUnderTrailFragment : Fragment() {
                     }
                     textView.textSize = 13.0f
                     textView.setTag(i) // 현재가 몇번째 값인지 tag 걸어줌
+                    textView.gravity = Gravity.CENTER
                     row.addView(textView)
                 }
                 activity.stationTimeTable.addView(row)
@@ -136,6 +136,7 @@ class DetailUnderTrailFragment : Fragment() {
                     //Log.e("test", cursor.getString(i))
                     textView.textSize = 13.0f
                     textView.setTag(i) // 현재가 몇번째 값인지 tag 걸어줌
+                    textView.gravity = Gravity.CENTER
                     row.addView(textView)
                 }
                 activity2.stationTimeTable2.addView(row)

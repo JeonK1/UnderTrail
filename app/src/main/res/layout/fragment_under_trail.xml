@@ -11,12 +11,14 @@
         <AutoCompleteTextView
             android:id="@+id/startStationEditText"
             android:layout_gravity="center_horizontal"
+            android:gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:hint="출발역을 입력해주세요"/>
         <AutoCompleteTextView
             android:id="@+id/endStationEditText"
             android:layout_gravity="center_horizontal"
+            android:gravity="center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:hint="도착역을 입력해주세요"/>
@@ -24,19 +26,50 @@
             android:layout_gravity="center_horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
-        <Button
-            android:id="@+id/clearBtn"
-            android:text="새로고침"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-        <Button
-            android:id="@+id/findRouteBtn"
-            android:layout_gravity="center_horizontal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="확인"/>
+            <Button
+                android:id="@+id/clearBtn"
+                android:text="새로고침"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+            <Button
+                android:id="@+id/findRouteBtn"
+                android:layout_gravity="center_horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="확인"/>
         </LinearLayout>
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <ImageView
+                android:layout_gravity="center_vertical"
+                android:windowSoftInputMode="adjustPan"
+                android:background="@drawable/wa_sans_half"
+                android:layout_width="200dp"
+                android:layout_height="400dp"/>
+            <ImageView
+                android:layout_gravity="center_vertical |right"
+                android:windowSoftInputMode="adjustPan"
+                android:background="@drawable/wa_thatsme_half"
+                android:layout_width="200dp"
+                android:layout_height="400dp"/>
+            <ScrollView
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TableLayout
+                    android:id="@+id/routeTable"
+                    android:fontFamily="@font/undertail_font"
+                    android:paddingTop="15dp"
+                    android:paddingBottom="100dp"
+                    android:textSize="13sp"
+                    android:textColor="@android:color/white"
+                    android:gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                </TableLayout>
+            </ScrollView>
+        </FrameLayout>
     </LinearLayout>
-
-
 </FrameLayout>

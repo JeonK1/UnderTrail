@@ -2,14 +2,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/navigation_first"
-        android:icon="@drawable/ic_launcher_foreground"
+        android:icon="@android:drawable/ic_dialog_dialer"
         android:title="빠른메뉴" />
     <item
         android:id="@+id/navigation_second"
-        android:icon="@drawable/ic_launcher_foreground"
-        android:title="메인" />
+        android:icon="@android:drawable/ic_dialog_map"
+        android:title="길찾기" />
     <item
         android:id="@+id/navigation_third"
-        android:icon="@drawable/ic_launcher_foreground"
-        android:title="자세히" />
+        android:icon="@android:drawable/ic_menu_search"
+        android:title="역 검색" />
 </menu>

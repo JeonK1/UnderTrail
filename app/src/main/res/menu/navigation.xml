@@ -12,4 +12,8 @@
         android:id="@+id/navigation_third"
         android:icon="@android:drawable/ic_menu_search"
         android:title="역 검색" />
+    <item
+        android:id="@+id/navigation_forth"
+        android:icon="@android:drawable/ic_menu_help"
+        android:title="개발자" />
 </menu>

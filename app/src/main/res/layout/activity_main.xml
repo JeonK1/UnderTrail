@@ -7,14 +7,17 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <ImageView
-        android:text="UnderTrail"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
         android:background="@drawable/undertrail_logo"
         android:gravity="center"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:text="UnderTrail"
         android:textSize="25sp"
-        android:textStyle="bold"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"/>
+        android:textStyle="bold" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

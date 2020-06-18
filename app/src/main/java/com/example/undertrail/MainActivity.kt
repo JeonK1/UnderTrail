@@ -18,6 +18,7 @@ class MainActivity : AppCompatActivity() {
     val quickUnderTrailFragment = QuickUnderTrailFragment()
     val underTrailFragment = UnderTrailFragment()
     val detailUnderTrailFragment = DetailUnderTrailFragment()
+    val developerFragment = DeveloperFragment()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -89,9 +90,22 @@ class MainActivity : AppCompatActivity() {
                     fragment.commit()
                     true
                 }
+                R.id.navigation_forth -> {
+                    //fragment select
+                    val fragment = supportFragmentManager.beginTransaction()
+                    fragment.addToBackStack(null)
+                    fragment.replace(R.id.myFragment, developerFragment)
+                    fragment.commit()
+                    true
+                }
+
                 else -> { false }
             }
         }
+    }
+
+    override fun onBackPressed() {
+        finish()
     }
 
     override fun onRequestPermissionsResult(

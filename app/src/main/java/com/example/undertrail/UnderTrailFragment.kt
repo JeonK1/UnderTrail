@@ -131,6 +131,7 @@ class UnderTrailFragment : Fragment() {
                     if(myDBHelper.SIDtoSName(result[result.size-1-tmp]).equals(myDBHelper.SIDtoSName(result[result.size-1-(tmp+1)]))) {
                         textStr += " (환승)"
                         boldFlag = true
+                        tmp++
                     }
                 }
                 textView.text = textStr

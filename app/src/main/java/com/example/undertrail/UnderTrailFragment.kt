@@ -1,6 +1,7 @@
 package com.example.undertrail
 
 import android.content.Context
+import android.database.CursorIndexOutOfBoundsException
 import android.graphics.Color
 import android.location.Location
 import android.location.LocationListener
@@ -12,10 +13,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.EditText
-import android.widget.TableRow
-import android.widget.TextView
+import android.widget.*
 import kotlinx.android.synthetic.main.fragment_detail_under_trail.*
 import kotlinx.android.synthetic.main.fragment_under_trail.*
 import kotlinx.android.synthetic.main.raw_station.*
@@ -95,53 +93,70 @@ class UnderTrailFragment : Fragment() {
         findRouteBtn.setOnClickListener {
             //확인버튼
             myDBHelper = MyDBHelper(context)
-            val strSid = myDBHelper.SNametoSID(startStationEditText.text.toString())
-            val endSid = myDBHelper.SNametoSID(endStationEditText.text.toString())
-            val result = myDBHelper.findRoute(strSid, endSid)
-            for(res in result){
-                Log.e("testQueryRoute", res.toString())
-            }
-
-            val activity = context as MainActivity
-            activity.routeTable.removeAllViewsInLayout()        //모두 제거하겠던 소리
-            //column 타이틀 만들기 ( activity )
-            val tablerow = TableRow(activity)
-            val rowParam = TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.WRAP_CONTENT, 1.0f)
-            tablerow.layoutParams = rowParam
-            val viewParams = TableRow.LayoutParams(0, 100, 1f)
-
-            for (i in 0 until 1) {
-                //column은 1개입니다.
-                val textView = TextView(activity)
-                textView.layoutParams = viewParams
-                textView.gravity = Gravity.CENTER
-                tablerow.addView(textView)
-            }
-            activity.routeTable.addView(tablerow)
-            //실제 레코드 읽어오기
-            var tmp = 0
-            while(tmp < result.size){
-                val row = TableRow(activity)
-                row.layoutParams = rowParam
-                val textView = TextView(activity)
-                textView.layoutParams = viewParams
-                var textStr = myDBHelper.SIDtoSName(result[result.size-1-tmp])
-                var boldFlag = false
-                if(tmp<result.size-1) {
-                    if(myDBHelper.SIDtoSName(result[result.size-1-tmp]).equals(myDBHelper.SIDtoSName(result[result.size-1-(tmp+1)]))) {
-                        textStr += " (환승)"
-                        boldFlag = true
-                        tmp++
-                    }
+            try {
+                val strSid = myDBHelper.SNametoSID(startStationEditText.text.toString())
+                val endSid = myDBHelper.SNametoSID(endStationEditText.text.toString())
+                val result = myDBHelper.findRoute(strSid, endSid)
+                for (res in result.first) {
+                    Log.e("testQueryRoute", res.toString())
                 }
-                textView.text = textStr
-                textView.textSize = 13.0f
-                if(boldFlag)
-                    textView.textSize = 15.0f
-                textView.gravity = Gravity.CENTER
-                row.addView(textView)
-                activity.routeTable.addView(row)
-                tmp+=1
+
+                val activity = context as MainActivity
+                activity.routeTable.removeAllViewsInLayout()        //모두 제거하겠던 소리
+                //column 타이틀 만들기 ( activity )
+                val tablerow = TableRow(activity)
+                val rowParam = TableRow.LayoutParams(
+                    TableRow.LayoutParams.MATCH_PARENT,
+                    TableRow.LayoutParams.WRAP_CONTENT,
+                    1.0f
+                )
+                tablerow.layoutParams = rowParam
+                val viewParams = TableRow.LayoutParams(0, 100, 1f)
+
+                for (i in 0 until 1) {
+                    //column은 1개입니다.
+                    val textView = TextView(activity)
+                    textView.layoutParams = viewParams
+                    textView.gravity = Gravity.CENTER
+                    tablerow.addView(textView)
+                }
+                activity.routeTable.addView(tablerow)
+                //실제 레코드 읽어오기
+                var tmp = 0
+                while (tmp < result.first.size) {
+                    val row = TableRow(activity)
+                    row.layoutParams = rowParam
+                    val textView = TextView(activity)
+                    textView.layoutParams = viewParams
+                    var textStr = myDBHelper.SIDtoSName(result.first[result.first.size - 1 - tmp])
+                    var boldFlag = false
+                    if (tmp < result.first.size - 1) {
+                        if (myDBHelper.SIDtoSName(result.first[result.first.size - 1 - tmp])
+                                .equals(myDBHelper.SIDtoSName(result.first[result.first.size - 1 - (tmp + 1)]))
+                        ) {
+                            textStr += " (환승)"
+                            boldFlag = true
+                            tmp++
+                        }
+                    }
+                    textView.text = textStr
+                    textView.textSize = 13.0f
+                    if (boldFlag) {
+                        textView.textSize = 18.0f
+                    }
+                    textView.gravity = Gravity.CENTER
+                    row.addView(textView)
+                    activity.routeTable.addView(row)
+                    tmp += 1
+                }
+                var totalWeight = 0
+                for (weight in result.second) {
+                    totalWeight += weight
+                    totalWeightTextView.setText(totalWeight.toString() + " 분")
+                }
+            }
+            catch (e: CursorIndexOutOfBoundsException){
+                Toast.makeText(context, "결과를 찾을 수 없습니다.", Toast.LENGTH_SHORT).show()
             }
         }
     }

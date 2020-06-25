@@ -1,6 +1,7 @@
 package com.example.undertrail
 
 import android.database.Cursor
+import android.database.CursorIndexOutOfBoundsException
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
@@ -98,17 +99,6 @@ class DetailUnderTrailFragment : Fragment() {
         do{
             val row = TableRow(activity)
             row.layoutParams = rowParam
-//            row.setOnClickListener {
-//                for(i in 0 until columnCount){
-//                    val txtView = row.getChildAt(i) as TextView
-//                    when(txtView.tag){
-//                        0 -> activity.pIdEdit.setText(txtView.text)
-//                        1 -> activity.pNameEdit.setText(txtView.text)
-//                        2 -> activity.pQuantityEdit.setText(txtView.text)
-//                    }
-//                }
-//            }
-//            val rowParam = TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.WRAP_CONTENT, columnCount.toFloat())
             if(cursor.getString(0)=="1") {
                 for (i in 1 until columnCount) {
                     val textView = TextView(activity)
@@ -128,12 +118,10 @@ class DetailUnderTrailFragment : Fragment() {
                 activity.stationTimeTable.addView(row)
             }
             else if(cursor.getString(0)=="2") {
-                //Log.e("Test", "test")
                 for (i in 1 until columnCount) {
                     val textView = TextView(activity)
                     textView.layoutParams = viewParams2
                     textView.text = cursor.getString(i)
-                    //Log.e("test", cursor.getString(i))
                     textView.textSize = 13.0f
                     textView.setTag(i) // 현재가 몇번째 값인지 tag 걸어줌
                     textView.gravity = Gravity.CENTER
@@ -149,7 +137,7 @@ class DetailUnderTrailFragment : Fragment() {
         searchBnt.setOnClickListener {
             if(autoCompleteText.text.toString() != ""){
                 val tmpText = autoCompleteText.text.toString()
-                if(tmpText.contains("(")){
+                try{
                     var sName = tmpText.split("(")[0]
                     var sLineNum = tmpText.split("(")[1]
                     sLineNum = sLineNum.substring(0, sLineNum.length-1)
@@ -169,8 +157,14 @@ class DetailUnderTrailFragment : Fragment() {
                         showTableLayout(nowDBID, radioFlag)
                     }
                 }
-                else{
+                catch (e: CursorIndexOutOfBoundsException){
                     Toast.makeText(context, "결과를 찾을 수 없습니다.", Toast.LENGTH_SHORT).show()
+                }
+                catch (e: StringIndexOutOfBoundsException){
+                    Toast.makeText(context, "결과를 찾을 수 없습니다.", Toast.LENGTH_SHORT).show()
+                }
+                catch (e: IndexOutOfBoundsException){
+                Toast.makeText(context, "결과를 찾을 수 없습니다.", Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -191,7 +185,6 @@ class DetailUnderTrailFragment : Fragment() {
 
     private fun initAutoComplete() {
         myDBHelper = MyDBHelper(context)
-        //val result = myDBHelper.findProduct("1916")
         nameList = myDBHelper.getAllStationName()
         adapter = ArrayAdapter(
             this!!.context!!,

@@ -73,7 +73,7 @@ class MyDBHelper(val context: Context?) : SQLiteOpenHelper(context, DB_NAME, nul
         val cursor = db.rawQuery(strsql, null)
         return cursor
     }
-    fun findRoute(strSId:Int, endSId:Int):ArrayList<Int>{
+    fun findRoute(strSId:Int, endSId:Int): Pair<ArrayList<Int>, ArrayList<Int>> {
         data class MyConnect(val dstSId:Int, val weight:Int){
         }
         data class MyStation(val mySId:Int, val connectList: ArrayList<MyConnect>, var backSId:Int, var backWeight:Int, var totalWeight:Int){
@@ -132,7 +132,7 @@ class MyDBHelper(val context: Context?) : SQLiteOpenHelper(context, DB_NAME, nul
                     tmpSId = stations[tmpSId-1].backSId
                     tmpSWeight = stations[tmpSId-1].backWeight
                     route.add(tmpSId)
-                    routeWeight.add(tmpSId)
+                    routeWeight.add(tmpSWeight)
                 }
                 break
             }
@@ -154,13 +154,15 @@ class MyDBHelper(val context: Context?) : SQLiteOpenHelper(context, DB_NAME, nul
             routeWeight.removeAt(tmpSize-1)
         }
         tmpSize = route.size
+        for(w in routeWeight){
+            Log.e("routeWeight : ", w.toString())
+        }
         //마지막 역 환승으로 인한 중복일시 중복 제거
         if(SIDtoSName(route[0]).equals(SIDtoSName(route[1]))){
             route.removeAt(0)
             routeWeight.removeAt(0)
         }
-        Log.e("findRoute", "weight : "+route.size.toString())
-        return route
+        return Pair(route, routeWeight)
         // 출발지나 도착지가 환승역인 경우.. 예를들어... "군자 군자 아차산 .... 모란 모란" 이런식으로 두번 불려서 걸리는시간이 원래보다 더 추가될 수 있음. 그니까 맨 앞이랑 맨 뒤가 중복되는게 있으면 알아서 짤라주셔야합니다.
     }
 

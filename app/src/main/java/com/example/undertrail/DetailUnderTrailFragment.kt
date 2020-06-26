@@ -26,7 +26,7 @@ class DetailUnderTrailFragment : Fragment() {
     lateinit var adapter: ArrayAdapter<String>
     var firstExecuteFlag=0
     var radioFlag = 1
-    var nowDBID = -1
+    var nowDBID = "-1"
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,7 +44,7 @@ class DetailUnderTrailFragment : Fragment() {
         initBtn()
 
     }
-    private fun showTableLayout(db_id:Int, radioFlag:Int) {
+    private fun showTableLayout(db_id:String, radioFlag:Int) {
         myDBHelper = MyDBHelper(context)
         //선택한게 평일이면, 공휴일이면
         val cursor = myDBHelper.getTimeTable(db_id, radioFlag)
@@ -153,7 +153,7 @@ class DetailUnderTrailFragment : Fragment() {
                         stationPhoneNum.setText(station.sPhoneNum)
                         stationMapURL.setText(station.sMapURL)
 
-                        nowDBID = myDBHelper.SIDtoDBID(station.sId.toInt()).toInt()
+                        nowDBID = myDBHelper.SIDtoDBID(station.sId.toInt())
                         showTableLayout(nowDBID, radioFlag)
                     }
                 }
@@ -169,7 +169,7 @@ class DetailUnderTrailFragment : Fragment() {
             }
         }
         radio_group.setOnCheckedChangeListener { group, checkedId ->
-            if(nowDBID!=-1) {
+            if(!nowDBID.equals("-1")) {
                 if (checkedId == R.id.radioButton1) {
                     //평일
                     radioFlag = 1

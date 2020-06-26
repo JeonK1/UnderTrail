@@ -59,7 +59,7 @@ class MyDBHelper(val context: Context?) : SQLiteOpenHelper(context, DB_NAME, nul
         return cursor.getString(0)
     }
 
-    fun getTimeTable(db_id:Int, radioFlag:Int): Cursor {
+    fun getTimeTable(db_id:String, radioFlag:Int): Cursor {
         var whereContext = ""
         if(radioFlag==1)
             whereContext = "(a.date=7 or a.date=4)"
@@ -151,7 +151,7 @@ class MyDBHelper(val context: Context?) : SQLiteOpenHelper(context, DB_NAME, nul
         var tmpSize = route.size
         if(SIDtoSName(route[tmpSize-1]).equals(SIDtoSName(route[tmpSize-2]))){
             route.removeAt(tmpSize-1)
-            routeWeight.removeAt(tmpSize-1)
+            routeWeight.removeAt(routeWeight.size-1)
         }
         tmpSize = route.size
         for(w in routeWeight){

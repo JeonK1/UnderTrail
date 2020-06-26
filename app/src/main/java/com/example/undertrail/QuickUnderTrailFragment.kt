@@ -100,6 +100,7 @@ class QuickUnderTrailFragment : Fragment() {
         }
         stationRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         stationAdapter = StationAdpater(resultList2)
+        /*
         stationAdapter.itemClickListener = object:StationAdpater.OnItemClickListener{
             override fun OnItemClick(
                 holder: StationAdpater.MyViewHolder,
@@ -110,6 +111,7 @@ class QuickUnderTrailFragment : Fragment() {
                 //item 클릭했을때의 상황..
             }
         }
+         */
         stationRecyclerView.adapter = stationAdapter
     }
 }

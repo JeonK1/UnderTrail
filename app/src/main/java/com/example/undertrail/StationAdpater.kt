@@ -42,8 +42,16 @@ class StationAdpater(val items:ArrayList<QuickStationInfo>): RecyclerView.Adapte
         holder.sName.text = items[position].station.sName+"역"
         holder.sLineNum.text = items[position].station.sLine_num
         holder.sDistance.text = items[position].station.sDistance.toString() + "m"
-        holder.leftMinTrail1.text = items[position].nearTrainInfo1.leftMinute + "분 뒤에 도착합니다."
-        holder.leftMinTrail2.text = items[position].nearTrainInfo2.leftMinute + "분 뒤에 도착합니다."
+        if(items[position].nearTrainInfo1.leftMinute.equals("0"))
+            holder.leftMinTrail1.text = "잠시 후 도착합니다."
+        else
+            holder.leftMinTrail1.text = items[position].nearTrainInfo1.leftMinute + "분 뒤에 도착합니다."
+        if(items[position].nearTrainInfo2.leftMinute.equals("0"))
+            holder.leftMinTrail2.text = "잠시 후 도착합니다."
+        else
+            holder.leftMinTrail2.text = items[position].nearTrainInfo2.leftMinute + "분 뒤에 도착합니다."
+//        holder.leftMinTrail1.text = items[position].nearTrainInfo1.leftMinute + "분 뒤에 도착합니다."
+//        holder.leftMinTrail2.text = items[position].nearTrainInfo2.leftMinute + "분 뒤에 도착합니다."
         holder.lastStationTrain1.text = items[position].nearTrainInfo1.lastStationName + "행"
         holder.lastStationTrain2.text = items[position].nearTrainInfo2.lastStationName + "행"
     }

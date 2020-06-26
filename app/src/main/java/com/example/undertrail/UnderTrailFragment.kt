@@ -149,6 +149,7 @@ class UnderTrailFragment : Fragment() {
                     activity.routeTable.addView(row)
                     tmp += 1
                 }
+                totalWeightLayout.visibility = View.VISIBLE
                 var totalWeight = 0
                 for (weight in result.second) {
                     totalWeight += weight

@@ -121,7 +121,13 @@ class DetailUnderTrailFragment : Fragment() {
                 for (i in 1 until columnCount) {
                     val textView = TextView(activity)
                     textView.layoutParams = viewParams2
-                    textView.text = cursor.getString(i)
+                    if(i==columnCount-1) {
+                        var tmp = cursor.getString(i) + " 행"
+                        textView.text = tmp
+                    }
+                    else{
+                        textView.text = cursor.getString(i)
+                    }
                     textView.textSize = 13.0f
                     textView.setTag(i) // 현재가 몇번째 값인지 tag 걸어줌
                     textView.gravity = Gravity.CENTER

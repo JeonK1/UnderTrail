@@ -147,6 +147,7 @@ class MyDBHelper(val context: Context?) : SQLiteOpenHelper(context, DB_NAME, nul
                 stations[tmpConnect.dstSId-1].backWeight = tmpConnect.weight
             }
         }
+        routeWeight.removeAt(routeWeight.size-1)  // 마지막은 -1이 들어가서 일단 이거 제거함
         //처음 역 환승으로 인한 중복일시 중복 제거
         var tmpSize = route.size
         if(SIDtoSName(route[tmpSize-1]).equals(SIDtoSName(route[tmpSize-2]))){
@@ -154,9 +155,11 @@ class MyDBHelper(val context: Context?) : SQLiteOpenHelper(context, DB_NAME, nul
             routeWeight.removeAt(routeWeight.size-1)
         }
         tmpSize = route.size
+        /*
         for(w in routeWeight){
             Log.e("routeWeight : ", w.toString())
         }
+         */
         //마지막 역 환승으로 인한 중복일시 중복 제거
         if(SIDtoSName(route[0]).equals(SIDtoSName(route[1]))){
             route.removeAt(0)

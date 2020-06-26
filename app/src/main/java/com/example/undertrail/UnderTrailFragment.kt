@@ -152,6 +152,7 @@ class UnderTrailFragment : Fragment() {
                 totalWeightLayout.visibility = View.VISIBLE
                 var totalWeight = 0
                 for (weight in result.second) {
+                    Log.e("weight:",weight.toString())
                     totalWeight += weight
                     totalWeightTextView.setText(totalWeight.toString() + " 분")
                 }

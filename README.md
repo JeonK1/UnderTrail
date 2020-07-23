@@ -15,6 +15,6 @@
 <img src="/images/screen.png" width=800 />
 <br><br>
 <h2>개발 환경</h2><br>
-Android Studio 3.6.3
-openjdk 14.0.1
+Android Studio 3.6.3 <br>
+openjdk 14.0.1 <br>
 주의 : 가상머신을 활용하여 실행하면 일부 기능이 오작동할 수 있습니다.

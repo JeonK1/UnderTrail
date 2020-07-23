@@ -11,17 +11,7 @@
 <br>
 <br><br>
 <h2>실행 화면</h2>
-<img src="/images/screen1.png" width=200 />
-<br>
-<img src="/images/screen2.png" width=200 />
-<br>
-<img src="/images/screen3.png" width=200 />
-<br>
-<img src="/images/screen4.png" width=200 />
-<br>
-<img src="/images/screen5.png" width=200 />
-<br>
-<img src="/images/screen6.png" width=200 />
+<img src="/images/screen.png" width=800 />
 <br><br>
 <h2>개발 환경</h2>
 Android Studio 3.6.3

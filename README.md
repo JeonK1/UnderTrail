@@ -7,7 +7,7 @@
 - 따라서 인근 지하철역에 대한 정보를 우선으로 제공하는 어플리케이션을 만들고자 하였다.
 <br><br>
 <h2>화면설계, 디자인, 개발가이드라인</h2>
-![predevelop](/images/predev.png)
+![predevelop](https://github.com/JeonK1/UnderTrail/blob/master/images/predev.png?raw=true)
 <br>
 <br><br>
 <h2>실행 화면</h2>

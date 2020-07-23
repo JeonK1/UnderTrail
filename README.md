@@ -1,5 +1,6 @@
 # UnderTrail
 ![mainPoster](/images/main.png)
+<img src="/images/main.png" width=500/>
 <br>건국대학교 모바일프로그래밍 개인프로젝트 사용자 위치기반 지하철 안내 서비스, UnderTrail 
 <br><br>
 <h2>프로젝트 개요</h2>
@@ -7,22 +8,22 @@
 - 따라서 인근 지하철역에 대한 정보를 우선으로 제공하는 어플리케이션을 만들고자 하였다.
 <br><br>
 <h2>화면설계, 디자인, 개발가이드라인</h2>
-![predevelop](https://github.com/JeonK1/UnderTrail/blob/master/images/predev.png?raw=true)
+<img src="/images/predev.png" width=600 />
 <br>
 <br><br>
 <h2>실행 화면</h2>
-![screen1](/images/screen1.png)
+<img src="/images/screen1.png" width=200 />
 <br>
-![screen2](/images/screen2.png)
+<img src="/images/screen2.png" width=200 />
 <br>
-![screen3](/images/screen3.png)
+<img src="/images/screen3.png" width=200 />
 <br>
-![screen4](/images/screen4.png)
+<img src="/images/screen4.png" width=200 />
 <br>
-![screen5](/images/screen5.png)
+<img src="/images/screen5.png" width=200 />
 <br>
-![screen6](/images/screen6.png)
-<br>
+<img src="/images/screen6.png" width=200 />
+<br><br>
 <h2>개발 환경</h2>
 Android Studio 3.6.3
 openjdk 14.0.1
